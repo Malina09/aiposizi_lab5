@@ -21,9 +21,9 @@ public class HttpServer implements Runnable {
 
     private Socket connect;
 
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private BufferedOutputStream outputStream;
+    //private BufferedReader reader;
+    //private PrintWriter writer;
+    //private BufferedOutputStream outputStream;
 
     HttpServer(Socket connect) {
         this.connect = connect;
@@ -39,12 +39,13 @@ public class HttpServer implements Runnable {
     @Override
     public void run() {
         String fileRequested = null;
-        try {
+        try (BufferedReader
             reader = new BufferedReader(
                             new InputStreamReader(
                                     connect.getInputStream()));
-            writer = new PrintWriter(connect.getOutputStream());
-            outputStream = new BufferedOutputStream(connect.getOutputStream());
+            PrintWriter writer = new PrintWriter(connect.getOutputStream());
+            BufferedOutputStream outputStream = new BufferedOutputStream(connect.getOutputStream());
+            ){
 
             String input = reader.readLine();
             logger.log(Level.INFO, "Input is:\n" + input);
@@ -83,16 +84,6 @@ public class HttpServer implements Runnable {
             }
         } catch (IOException ioe) {
             logger.log(Level.ERROR, "Server error : " + ioe);
-        } finally {
-            try {
-                reader.close();
-                writer.close();
-                outputStream.close();
-                connect.close();
-            } catch (Exception e) {
-                logger.log(Level.ERROR, "Error closing stream : " + e.getMessage());
-            }
-            logger.log(Level.INFO, "Connection closed");
         }
     }
 
@@ -150,6 +141,13 @@ public class HttpServer implements Runnable {
     }
 
     private void createResponse(HttpCodes code, ContentType content, int fileLength, byte[] fileData) throws IOException {
+        BufferedReader
+                reader = new BufferedReader(
+                new InputStreamReader(
+                        connect.getInputStream()));
+        PrintWriter writer = new PrintWriter(connect.getOutputStream());
+        BufferedOutputStream outputStream = new BufferedOutputStream(connect.getOutputStream());
+
         writer.println("HTTP/1.1 " + code.getCode() + " " + code.getDescription());
         writer.println("Server: Java HTTP Server");
         writer.println("Date: " + new Date());

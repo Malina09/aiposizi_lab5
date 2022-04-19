@@ -31,19 +31,6 @@ public class Main {
                 logger.log(Level.INFO, HELP);
                 return;
             }
-            Optional<String> portCommandOptional = commands.stream()
-                    .filter(x -> x.startsWith("-p") || x.startsWith("--port"))
-                    .findFirst();
-            if (portCommandOptional.isPresent()){
-                String portCommand = portCommandOptional.get();
-                try {
-                    String portString = portCommand.substring(portCommand.indexOf("=")+1);
-                    port = Integer.parseInt(portString);
-                    logger.log(Level.INFO, "ok, using port: " + port);
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e){
-                    logger.log(Level.WARN, "argument is invalid, using default(8082) port;");
-                }
-            }
         }
 
         try {

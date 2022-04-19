@@ -21,8 +21,5 @@ public class ImageReader implements Reader {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
-//        WritableRaster writableRaster=image.getRaster();
-//        DataBufferByte data= (DataBufferByte) writableRaster.getDataBuffer();
-//        return data.getData();
     }
 }
