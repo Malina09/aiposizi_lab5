@@ -32,7 +32,7 @@ public class Main {
                 return;
             }
         }
-
+    
         try {
             ServerSocket serverConnect = new ServerSocket(port);
             logger.log(Level.INFO, "Server started. Listening for connections on port : " + port);
