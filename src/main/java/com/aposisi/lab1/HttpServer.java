@@ -39,13 +39,13 @@ public class HttpServer implements Runnable {
     @Override
     public void run() {
         String fileRequested = null;
-        try (BufferedReader
+        BufferedReader reader = null;
+        try {
+
             reader = new BufferedReader(
                             new InputStreamReader(
                                     connect.getInputStream()));
-            PrintWriter writer = new PrintWriter(connect.getOutputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(connect.getOutputStream());
-            ){
+
 
             String input = reader.readLine();
             logger.log(Level.INFO, "Input is:\n" + input);
@@ -85,12 +85,24 @@ public class HttpServer implements Runnable {
         } catch (IOException ioe) {
             logger.log(Level.ERROR, "Server error : " + ioe);
         }
+        finally {
+            try {
+                reader.close();
+                connect.close();
+            } catch (Exception e) {
+                logger.log(Level.ERROR, "Error closing stream : " + e.getMessage());
+            }
+            logger.log(Level.INFO, "Connection closed");
+        }
     }
 
     private void processGet(String fileRequested) throws IOException {
         logger.log(Level.INFO, "GET request was accepted");
         if (fileRequested.endsWith("/")) {
             fileRequested += DEFAULT_FILE;
+        }
+        if (fileRequested.contains("..")){
+                throw new IOException();
         }
         InputStream inputStream = findFile(fileRequested, true);
         ContentType content = ContentType.findByFileName(fileRequested);
@@ -141,10 +153,7 @@ public class HttpServer implements Runnable {
     }
 
     private void createResponse(HttpCodes code, ContentType content, int fileLength, byte[] fileData) throws IOException {
-        BufferedReader
-                reader = new BufferedReader(
-                new InputStreamReader(
-                        connect.getInputStream()));
+        
         PrintWriter writer = new PrintWriter(connect.getOutputStream());
         BufferedOutputStream outputStream = new BufferedOutputStream(connect.getOutputStream());
 
