@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import javax.management.InstanceNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Arrays;
@@ -40,14 +41,14 @@ public class Main {
             while (true) {
                 HttpServer myServer = new HttpServer(serverConnect.accept());
 
-                System.out.println("Connecton opened. (" + new Date() + ")");
+                logger.log(Level.INFO,"Connection opened. (" + new Date() + ")");
 
                 Thread thread = new Thread(myServer);
                 thread.start();
             }
 
         } catch (IOException e) {
-            System.err.println("Server Connection error : " + e.getMessage());
+            logger.log(Level.ERROR,"Server Connection error : " + e.getMessage());
         }
     }
 
