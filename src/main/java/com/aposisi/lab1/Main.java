@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     private static final String HELP = "\n-h --help\tto print info\n -p --port\tto set custom port\n";
-    private static final int DEFAULT_PORT = 8082;
+    //private static final int DEFAULT_PORT = 8082;
 
     public static void main(String... args) {
         int port = 8082;

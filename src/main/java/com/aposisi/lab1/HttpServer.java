@@ -153,7 +153,7 @@ public class HttpServer implements Runnable {
     }
 
     private void createResponse(HttpCodes code, ContentType content, int fileLength, byte[] fileData) throws IOException {
-        
+
         PrintWriter writer = new PrintWriter(connect.getOutputStream());
         BufferedOutputStream outputStream = new BufferedOutputStream(connect.getOutputStream());
 
@@ -163,7 +163,7 @@ public class HttpServer implements Runnable {
         writer.println("Content-type: " + content.getText());
         writer.println("Content-length: " + fileLength);
         writer.println("Access-Control-Allow-Origin: " + "localhost");
-        writer.println("Access-Control-Allow-Methods: " + "GET, POST, DELETE, PUT");
+        writer.println("Access-Control-Allow-Methods: " + "GET, POST, OPTIONS");
         writer.println();
         writer.flush();
         outputStream.write(fileData, 0, fileLength);
